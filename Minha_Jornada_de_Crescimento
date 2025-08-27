@@ -541,10 +541,34 @@
         let reflections = [];
         let editingId = null;
         let deleteId = null; // ID da reflexão a ser excluída
+        let currentChallenge = "Leia 10 páginas de um livro inspirador hoje"; // Desafio padrão
         
-        // Load reflections from memory on page load
+        // Load reflections from localStorage on page load
         function loadReflections() {
+            const savedReflections = localStorage.getItem('mentorship-reflections');
+            if (savedReflections) {
+                reflections = JSON.parse(savedReflections);
+            }
             displayReflections();
+        }
+        
+        // Load current challenge from localStorage
+        function loadCurrentChallenge() {
+            const savedChallenge = localStorage.getItem('mentorship-current-challenge');
+            if (savedChallenge) {
+                currentChallenge = savedChallenge;
+                document.getElementById('daily-challenge-text').textContent = currentChallenge;
+            }
+        }
+        
+        // Save current challenge to localStorage
+        function saveCurrentChallenge() {
+            localStorage.setItem('mentorship-current-challenge', currentChallenge);
+        }
+        
+        // Save reflections to localStorage
+        function saveReflectionsToStorage() {
+            localStorage.setItem('mentorship-reflections', JSON.stringify(reflections));
         }
         
         function saveReflection() {
@@ -575,6 +599,7 @@
                 document.getElementById('reflection-input').value = '';
             }
             
+            saveReflectionsToStorage(); // Save to localStorage
             displayReflections();
         }
         
@@ -632,6 +657,7 @@
                     document.getElementById('reflection-input').value = '';
                 }
                 
+                saveReflectionsToStorage(); // Save to localStorage
                 displayReflections();
                 hideDeleteConfirmation();
             }
@@ -673,12 +699,15 @@
         
         function newChallenge() {
             const randomChallenge = challenges[Math.floor(Math.random() * challenges.length)];
-            document.getElementById('daily-challenge-text').textContent = randomChallenge;
+            currentChallenge = randomChallenge;
+            document.getElementById('daily-challenge-text').textContent = currentChallenge;
+            saveCurrentChallenge(); // Salva o novo desafio
         }
         
         // Initialize with first phase
         selectPhase(1);
         loadReflections();
+        loadCurrentChallenge(); // Carrega o desafio salvo
     </script>
 </body>
 </html>
