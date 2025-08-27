@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minha Jornada de Crescimento</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .phase-selector {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .phase-btn {
+            padding: 12px 20px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            font-weight: 600;
+        }
+        
+        .phase-btn:hover, .phase-btn.active {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: rgba(255,255,255,0.15);
+            border-radius: 20px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card h3 {
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .reflection-area {
+            grid-column: 1 / -1;
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .reflection-prompt {
+            margin-bottom: 15px;
+            font-style: italic;
+            opacity: 0.9;
+        }
+        
+        .reflection-input {
+            width: 100%;
+            min-height: 120px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            border-radius: 10px;
+            padding: 15px;
+            color: white;
+            font-size: 16px;
+            resize: vertical;
+        }
+        
+        .reflection-input::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .tips-list {
+            list-style: none;
+        }
+        
+        .tips-list li {
+            margin-bottom: 12px;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .tips-list li::before {
+            content: "💡";
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        
+        .progress-bar {
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            height: 20px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00C9FF 0%, #92FE9D 100%);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+        
+        .motivational-quote {
+            text-align: center;
+            font-size: 1.2rem;
+            font-style: italic;
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            border-left: 4px solid #00C9FF;
+        }
+        
+        .daily-challenge {
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            text-align: center;
+        }
+        
+        .daily-challenge h3 {
+            justify-content: center;
+        }
+        
+        .challenge-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .challenge-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.05);
+        }
+        
+        .confirmation-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .confirmation-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            max-width: 400px;
+            margin: 20px;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        
+        .confirmation-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .confirm-btn, .cancel-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .confirm-btn {
+            background: #FF6B6B;
+            color: white;
+        }
+        
+        .confirm-btn:hover {
+            background: #FF5252;
+            transform: scale(1.05);
+        }
+        
+        .cancel-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+        
+        .cancel-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.05);
+        }
+        
+        .reflection-item {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid #00C9FF;
+        }
+        
+        .reflection-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .reflection-date {
+            font-weight: 600;
+        }
+        
+        .reflection-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .action-btn {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+            font-size: 0.9rem;
+        }
+        
+        .action-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .edit-btn {
+            color: #92FE9D;
+        }
+        
+        .delete-btn {
+            color: #FF6B6B;
+        }
+        
+        .reflection-text {
+            line-height: 1.5;
+        }
+        
+        .editing-reflection {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            border-radius: 8px;
+            padding: 10px;
+            color: white;
+            font-size: 14px;
+            width: 100%;
+            min-height: 80px;
+            resize: vertical;
+        }
+        
+        .editing-reflection::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .phase-selector {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Minha Jornada de Crescimento</h1>
+            <p>Transformando potencial em realidade, um passo de cada vez</p>
+        </div>
+        
+        <div class="phase-selector">
+            <button class="phase-btn active" onclick="selectPhase(1)">Fase 1: Mentalidade</button>
+            <button class="phase-btn" onclick="selectPhase(2)">Fase 2: Ferramentas</button>
+            <button class="phase-btn" onclick="selectPhase(3)">Fase 3: Prática</button>
+            <button class="phase-btn" onclick="selectPhase(4)">Fase 4: Execução</button>
+            <button class="phase-btn" onclick="selectPhase(5)">Fase 5: Caráter</button>
+            <button class="phase-btn" onclick="selectPhase(6)">Fase 6: Mentalidade de Dono</button>
+        </div>
+        
+        <div class="motivational-quote" id="quote">
+            "O sucesso é a soma de pequenos esforços repetidos dia após dia." - Robert Collier
+        </div>
+        
+        <div class="dashboard">
+            <div class="card">
+                <h3>📊 Meu Progresso</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress" style="width: 15%"></div>
+                </div>
+                <p id="progress-text">Fase 1: Construindo o alicerce - 15% completo</p>
+            </div>
+            
+            <div class="card daily-challenge">
+                <h3>🎯 Desafio do Dia</h3>
+                <p id="daily-challenge-text">Leia 10 páginas de um livro inspirador hoje</p>
+                <button class="challenge-btn" onclick="newChallenge()">Novo Desafio</button>
+            </div>
+            
+            <div class="card">
+                <h3>💡 Dicas Práticas</h3>
+                <ul class="tips-list" id="tips">
+                    <li>Comece o dia com 5 minutos de reflexão</li>
+                    <li>Defina 3 metas pequenas para hoje</li>
+                    <li>Celebre cada pequena conquista</li>
+                    <li>Pergunte-se: "O que aprendi hoje?"</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h3>🎯 Foco da Fase Atual</h3>
+                <p id="phase-focus">Construir uma mentalidade de crescimento e desenvolver disciplina básica. Lembre-se: cada erro é uma lição, cada acerto é um passo adiante.</p>
+            </div>
+            
+            <div class="card reflection-area">
+                <h3>📝 Espaço de Reflexão</h3>
+                <div class="reflection-prompt" id="reflection-prompt">
+                    Como me senti hoje? Quais foram meus maiores desafios e conquistas?
+                </div>
+                <textarea class="reflection-input" id="reflection-input" placeholder="Escreva suas reflexões aqui... Seja honesto consigo mesmo, este é seu espaço seguro para crescer."></textarea>
+                <button class="challenge-btn" onclick="saveReflection()" style="margin-top: 10px;">💾 Salvar Reflexão</button>
+                
+                <div id="reflections-history" style="margin-top: 20px;">
+                    <h4 style="margin-bottom: 15px; opacity: 0.9;">📚 Minhas Reflexões Anteriores</h4>
+                    <div id="reflections-list"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Modal de Confirmação -->
+        <div class="confirmation-modal" id="confirmationModal">
+            <div class="confirmation-content">
+                <h3 style="margin-bottom: 15px;">⚠️ Confirmar Exclusão</h3>
+                <p style="margin-bottom: 20px;">Tem certeza que deseja excluir esta reflexão? Esta ação não pode ser desfeita.</p>
+                <div class="confirmation-buttons">
+                    <button class="confirm-btn" onclick="confirmDelete()">Sim, Excluir</button>
+                    <button class="cancel-btn" onclick="cancelDelete()">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const phaseData = {
+            1: {
+                focus: "Construir uma mentalidade de crescimento e desenvolver disciplina básica. Lembre-se: cada erro é uma lição, cada acerto é um passo adiante.",
+                tips: [
+                    "Comece o dia com 5 minutos de reflexão",
+                    "Defina 3 metas pequenas para hoje", 
+                    "Celebre cada pequena conquista",
+                    "Pergunte-se: 'O que aprendi hoje?'"
+                ],
+                quote: "O sucesso é a soma de pequenos esforços repetidos dia após dia. - Robert Collier",
+                reflection: "Como me senti hoje? Quais foram meus maiores desafios e conquistas?",
+                progress: 15
+            },
+            2: {
+                focus: "Aprender sobre dinheiro, investimentos e produtividade. O conhecimento é seu maior ativo - invista nele todos os dias.",
+                tips: [
+                    "Anote todos os seus gastos por uma semana",
+                    "Leia 20 minutos sobre finanças diariamente",
+                    "Organize seu tempo com uma agenda",
+                    "Pratique explicar conceitos para outros"
+                ],
+                quote: "Uma pessoa educada nunca fica desempregada. - Henry Ford",
+                reflection: "Que novo conceito aprendi esta semana? Como posso aplicá-lo na minha vida?",
+                progress: 35
+            },
+            3: {
+                focus: "Colocar conhecimento em prática através de pesquisas e apresentações. Comunicação clara é uma superpoder na vida.",
+                tips: [
+                    "Pratique apresentar ideias no espelho",
+                    "Faça perguntas inteligentes nas conversas",
+                    "Pesquise antes de opinar sobre algo",
+                    "Escute mais do que fala"
+                ],
+                quote: "A melhor maneira de aprender é ensinar. - Sêneca",
+                reflection: "Como posso melhorar minha comunicação? Que feedback recebi recentemente?",
+                progress: 55
+            },
+            4: {
+                focus: "Gerenciar projetos completos e resolver problemas sozinho. Você está se tornando alguém confiável e capaz.",
+                tips: [
+                    "Divida grandes tarefas em etapas menores",
+                    "Defina prazos realistas para cada etapa",
+                    "Antecipe possíveis problemas",
+                    "Documente seu processo de trabalho"
+                ],
+                quote: "O planejamento é trazer o futuro para o presente. - Alan Lakein",
+                reflection: "Que projeto estou mais orgulhoso? O que faria diferente na próxima vez?",
+                progress: 70
+            },
+            5: {
+                focus: "Enfrentar desafios difíceis com integridade e resiliência. Seu caráter está sendo forjado - seja honesto sempre.",
+                tips: [
+                    "Assuma responsabilidade pelos seus erros",
+                    "Mantenha a calma sob pressão",
+                    "Seja transparente sobre suas dificuldades",
+                    "Aprenda com cada fracasso"
+                ],
+                quote: "O caráter é como uma árvore e a reputação como sua sombra. - Abraham Lincoln",
+                reflection: "Como reagi à última dificuldade? Que valores não abro mão nunca?",
+                progress: 85
+            },
+            6: {
+                focus: "Pensar e agir como verdadeiro dono do negócio. Agora é hora de assumir responsabilidades reais e se esforçar ao máximo para agregar valor e ajudar seu mentor.",
+                tips: [
+                    "Antecipe problemas antes que aconteçam",
+                    "Traga soluções, não apenas problemas",
+                    "Assuma responsabilidades como se o resultado dependesse só de você",
+                    "Pense sempre: 'Como posso ajudar mais?'"
+                ],
+                quote: "Aja como dono e você se tornará dono. Pense pequeno e você permanecerá pequeno. - Jason Fried",
+                reflection: "Como posso agregar mais valor? Que responsabilidade extra posso assumir para ajudar meu mentor?",
+                progress: 100
+            }
+        };
+        
+        const challenges = [
+            "Leia sobre um assunto novo hoje",
+            "Escreva 5 coisas pelas quais você é grato e compartilhe com alguém",
+            "Ore pedindo sabedoria e direção a Deus",
+            "Faça uma lista de 3 ideias de negócio que você teria coragem de tentar",
+            "Organize seu quarto de forma completa e tire uma foto do antes e depois",
+            "Pense e escreva 3 coisas ruins que você quer deixar para trás",
+            "Ajude alguém sem esperar nada em troca",
+            "Passe 15 minutos conversando com um familiar sem usar o celular",
+            "Leia um capítulo do livro de Provérbios e anote o que mais te marcou",
+            "Anote 3 objetivos para a sua semana e um passo para começar hoje",
+            "Faça uma pergunta inteligente para alguém mais experiente",
+            "Escreva uma mensagem de agradecimento para uma pessoa importante na sua vida",
+            "Assista a um vídeo educativo sobre empreendedorismo e resuma em 5 frases",
+            "Reflita sobre um erro recente e escreva a lição aprendida",
+            "Faça uma caminhada de 20 minutos prestando atenção na natureza",
+            "Anote 3 ideias de como poderia ganhar dinheiro ainda na sua idade",
+            "Faça um elogio sincero a 3 pessoas diferentes hoje",
+            "Passe 10 minutos em silêncio pensando no que Deus já fez por você",
+            "Pratique 15 minutos de uma habilidade nova",
+            "Escreva uma lista com 10 qualidades que você gostaria de desenvolver",
+            "Prepare uma refeição simples e saudável para você ou sua família",
+            "Faça uma lista de 3 pessoas que você admira e por quê",
+            "Anote uma crença limitante que você tem e substitua por uma crença positiva",
+            "Passe 30 minutos lendo sobre um empreendedor de sucesso",
+            "Faça um ato de bondade anônimo para alguém",
+            "Anote 5 metas que você gostaria de alcançar antes dos 20 anos",
+            "Leia um salmo e escreva o que mais falou com você",
+            "Passe 15 minutos fazendo alongamentos e respiração profunda",
+            "Crie um pequeno plano de negócios para uma ideia simples",
+            "Converse com alguém mais velho e pergunte sobre uma lição de vida",
+            "Liste 3 coisas que você pode fazer para melhorar sua saúde",
+            "Escreva um versículo bíblico em um papel e cole em um lugar visível",
+            "Passe 1 hora sem nenhuma tecnologia, apenas refletindo e observando",
+            "Defina uma meta financeira",
+            "Leia sobre um missionário cristão e escreva o que te inspirou",
+            "Ajude em uma tarefa da casa sem que peçam",
+            "Escreva sobre como foi seu dia e o que poderia melhorar",
+            "Passe 20 minutos praticando foco",
+            "Crie uma lista de 5 coisas que você faria se não tivesse medo",
+            "Escreva 3 formas de compartilhar Jesus com seus amigos",
+            "Estude 30 minutos sobre um tema que você tem dificuldade na escola",
+            "Doe uma roupa ou objeto que você não usa mais",
+            "Faça uma oração de agradecimento apenas, sem pedir nada",
+            "Crie um cartaz ou desenho com seus sonhos e cole no quarto",
+            "Leia sobre um hábito saudável e tente aplicar hoje mesmo",
+            "Anote 3 formas de servir melhor sua família",
+            "Assista a um testemunho cristão e escreva o que aprendeu",
+            "Escreva uma frase de motivação e repita em voz alta 5 vezes",
+            "Crie uma lista de 3 coisas que faria se tivesse sua própria empresa",
+            "Passe 15 minutos ajudando alguém a estudar ou aprender algo novo",
+            "Leia 10 minutos sobre algum livro dos evangelhos da Biblia",
+            "Converse com Deus",
+            "Leia e reflita : Porque jesus morreu por mim? Eu morri com ele na cruz?"
+        ];
+        
+        let currentPhase = 1;
+        let reflections = [];
+        let editingId = null;
+        let deleteId = null; // ID da reflexão a ser excluída
+        
+        // Load reflections from memory on page load
+        function loadReflections() {
+            displayReflections();
+        }
+        
+        function saveReflection() {
+            const reflectionText = document.getElementById('reflection-input').value.trim();
+            
+            if (!reflectionText) {
+                alert('Por favor, escreva sua reflexão antes de salvar!');
+                return;
+            }
+            
+            if (editingId !== null) {
+                // Update existing reflection
+                const reflection = reflections.find(r => r.id === editingId);
+                reflection.text = reflectionText;
+                reflection.edited = true;
+                editingId = null;
+                document.getElementById('reflection-input').value = '';
+            } else {
+                // Create new reflection
+                const newReflection = {
+                    id: Date.now(),
+                    text: reflectionText,
+                    date: new Date().toLocaleDateString('pt-BR'),
+                    phase: currentPhase,
+                    edited: false
+                };
+                reflections.unshift(newReflection); // Add to beginning
+                document.getElementById('reflection-input').value = '';
+            }
+            
+            displayReflections();
+        }
+        
+        function displayReflections() {
+            const reflectionsList = document.getElementById('reflections-list');
+            
+            if (reflections.length === 0) {
+                reflectionsList.innerHTML = '<p style="opacity: 0.6; text-align: center;">Nenhuma reflexão salva ainda. Comece escrevendo sua primeira reflexão!</p>';
+                return;
+            }
+            
+            let htmlContent = '';
+            reflections.forEach(reflection => {
+                htmlContent += `
+                <div class="reflection-item" id="reflection-${reflection.id}">
+                    <div class="reflection-header">
+                        <span class="reflection-date">
+                            📅 ${reflection.date} | Fase ${reflection.phase}
+                            ${reflection.edited ? ' <span style="opacity: 0.7; font-size: 0.8rem;">(editado)</span>' : ''}
+                        </span>
+                        <div class="reflection-actions">
+                            <button class="action-btn edit-btn" onclick="editReflection(${reflection.id})" title="Editar">✏️</button>
+                            <button class="action-btn delete-btn" onclick="showDeleteConfirmation(${reflection.id})" title="Excluir">🗑️</button>
+                        </div>
+                    </div>
+                    <div class="reflection-text">${reflection.text}</div>
+                </div>`;
+            });
+            
+            reflectionsList.innerHTML = htmlContent;
+        }
+        
+        function editReflection(id) {
+            const reflection = reflections.find(r => r.id === id);
+            if (reflection) {
+                document.getElementById('reflection-input').value = reflection.text;
+                editingId = id;
+                document.getElementById('reflection-input').focus();
+            }
+        }
+        
+        function showDeleteConfirmation(id) {
+            deleteId = id;
+            document.getElementById('confirmationModal').style.display = 'flex';
+        }
+        
+        function confirmDelete() {
+            if (deleteId !== null) {
+                // Remove the reflection
+                reflections = reflections.filter(r => r.id !== deleteId);
+                
+                // Clear editing state if deleting the item being edited
+                if (editingId === deleteId) {
+                    editingId = null;
+                    document.getElementById('reflection-input').value = '';
+                }
+                
+                displayReflections();
+                hideDeleteConfirmation();
+            }
+        }
+        
+        function cancelDelete() {
+            hideDeleteConfirmation();
+        }
+        
+        function hideDeleteConfirmation() {
+            deleteId = null;
+            document.getElementById('confirmationModal').style.display = 'none';
+        }
+        
+        function selectPhase(phase) {
+            currentPhase = phase;
+            
+            // Update active button
+            document.querySelectorAll('.phase-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.phase-btn')[phase - 1].classList.add('active');
+            
+            // Update content
+            const data = phaseData[phase];
+            document.getElementById('phase-focus').textContent = data.focus;
+            document.getElementById('quote').textContent = data.quote;
+            document.getElementById('reflection-prompt').textContent = data.reflection;
+            document.getElementById('progress').style.width = data.progress + '%';
+            document.getElementById('progress-text').textContent = `Fase ${phase}: ${data.progress}% completo`;
+            
+            // Update tips
+            const tipsList = document.getElementById('tips');
+            tipsList.innerHTML = '';
+            data.tips.forEach(tip => {
+                const li = document.createElement('li');
+                li.textContent = tip;
+                tipsList.appendChild(li);
+            });
+        }
+        
+        function newChallenge() {
+            const randomChallenge = challenges[Math.floor(Math.random() * challenges.length)];
+            document.getElementById('daily-challenge-text').textContent = randomChallenge;
+        }
+        
+        // Initialize with first phase
+        selectPhase(1);
+        loadReflections();
+    </script>
+</body>
+</html>
