@@ -1,1 +1,1 @@
-### Projeto-Minha-Jornada-de-Crescimento : https://claude.ai/public/artifacts/c4bd6290-40f2-4015-b9e0-0b68b780ff81
+### Projeto-Minha-Jornada-de-Crescimento : https://claude.ai/public/artifacts/6e070e3d-6ca9-4fa4-b664-1d6fe4c7987b
